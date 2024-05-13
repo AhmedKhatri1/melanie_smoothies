@@ -3,8 +3,8 @@ import streamlit as st
 import requests
 from snowflake. snowpark. functions import col
 
-#warehouse_name = "COMPUTE_H"
-#session.execute(f"USE WAREHOUSE {warehouse_name}")
+warehouse_name = "COMPUTE_H"
+
 
 # Write directly to the app
 st.title(":cup_with_straw: Customize Your Smoothie!:cup_with_straw:")
@@ -24,16 +24,17 @@ st.write("The name on your Smoothie will be:", name_on_order)
 cnx = st.connection("snowflake")
 session = cnx.session()
 
-my_dataframe = session.table("smoothies.public.fruit_options").select(col('FRUIT_NAME'))
+session.execute(f"USE WAREHOUSE {warehouse_name}")
+
+#my_dataframe = session.table("smoothies.public.fruit_options").select(col('FRUIT_NAME'))
 #st.dataframe(data=my_dataframe, use_container_width=True)
 #st.stop()
 
-#try:
-#    my_dataframe = session.table("smoothies.public.fruit_options").select(col('FRUIT_NAME'),col('SEARCH_ON'))
-#    st.dataframe(data=my_dataframe, use_container_width=True)
-#    st.stop()
-#except Exception as e:
-#    st.error(f"An error occurred: {e}")
+try:
+    my_dataframe = session.table("smoothies.public.fruit_options").select(col('FRUIT_NAME'),col('SEARCH_ON'))
+    st.dataframe(data=my_dataframe, use_container_width=True)
+except Exception as e:
+    st.error(f"An error occurred: {e}")
 
 ingredients_list = st.multiselect(
 'Choose up to 5 ingredients: '
