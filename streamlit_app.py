@@ -1,7 +1,7 @@
 # Import python packages
 import streamlit as st
 import requests
-from snowflake. snowpark. functions import col
+from snowflake.snowpark.functions import col
 
 # Write directly to the app
 st.title(":cup_with_straw: Customize Your Smoothie!:cup_with_straw:")
@@ -14,17 +14,18 @@ st.write(
 name_on_order = st.text_input("Name on Smoothie:")
 st.write("The name on your Smoothie will be:", name_on_order)
 
-#session = get_active_session()
-#my_dataframe = session.table("smoothies.public.fruit_options")
-#st.dataframe (data=my_dataframe, use_container_width=True)
+# Set Snowflake connection options including warehouse
+conn_options = {
+    "account": "WOQATQC-QR71295",
+    "user": "AhmedKha3",
+    "password": "Aksnowflake@12345",
+    "warehouse": "COMPUTE_H"
+}
 
-cnx = st.connection("snowflake")
+cnx = st.connection("snowflake", **conn_options)
 session = cnx.session()
 
-warehouse_name = "COMPUTE_H"
-session.execute(f"USE WAREHOUSE {warehouse_name}")
-
-my_dataframe = session.table("smoothies.public.fruit_options").select(col('FRUIT_NAME'),col('SEARCH_ON'))
+my_dataframe = session.table("smoothies.public.fruit_options").select(col('FRUIT_NAME'), col('SEARCH_ON'))
 #st.dataframe(data=my_dataframe, use_container_width=True)
 #st.stop()
 
