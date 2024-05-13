@@ -1,6 +1,7 @@
 # Import python packages
 import streamlit as st
 import requests
+import snowflake.connector
 
 # Write directly to the app
 st.title(":cup_with_straw: Customize Your Smoothie!:cup_with_straw:")
@@ -21,13 +22,16 @@ conn_options = {
     "warehouse": "COMPUTE_H"
 }
 
-# Set active warehouse directly using Snowflake SQL command
+# Set active warehouse using Snowflake Python connector
 warehouse_name = conn_options["warehouse"]
 use_warehouse_query = f"USE WAREHOUSE {warehouse_name}"
 
 try:
-    cnx = st.experimental_connect(**conn_options)
+    # Establish Snowflake connection
+    cnx = snowflake.connector.connect(**conn_options)
     session = cnx.cursor()
+
+    # Set active warehouse
     session.execute(use_warehouse_query)
 
     # Fetch data from Snowflake table
@@ -38,6 +42,7 @@ try:
 
 except Exception as e:
     st.error(f"An error occurred: {e}")
+
 
 ingredients_list = st.multiselect(
 'Choose up to 5 ingredients: '
