@@ -1,7 +1,6 @@
 # Import python packages
 import streamlit as st
 import requests
-from snowflake.snowpark.functions import col
 
 # Write directly to the app
 st.title(":cup_with_straw: Customize Your Smoothie!:cup_with_straw:")
@@ -14,25 +13,31 @@ st.write(
 name_on_order = st.text_input("Name on Smoothie:")
 st.write("The name on your Smoothie will be:", name_on_order)
 
-# Set Snowflake connection options including warehouse
+# Set Snowflake connection options
 conn_options = {
-    "account": "WOQATQC-QR71295",
-    "user": "AhmedKha3",
-    "password": "Aksnowflake@12345",
+    "account": "your_account_name",
+    "user": "your_username",
+    "password": "your_password",
     "warehouse": "COMPUTE_H"
 }
 
-cnx = st.connection("snowflake", **conn_options)
-session = cnx.session()
+# Set active warehouse directly using Snowflake SQL command
+warehouse_name = conn_options["warehouse"]
+use_warehouse_query = f"USE WAREHOUSE {warehouse_name}"
 
 try:
-    my_dataframe = session.table("smoothies.public.fruit_options").select(col('FRUIT_NAME'), col('SEARCH_ON'))
+    cnx = st.experimental_connect(**conn_options)
+    session = cnx.cursor()
+    session.execute(use_warehouse_query)
+
+    # Fetch data from Snowflake table
+    query = "SELECT FRUIT_NAME, SEARCH_ON FROM smoothies.public.fruit_options"
+    session.execute(query)
+    my_dataframe = session.fetch_pandas_all()
     st.dataframe(data=my_dataframe, use_container_width=True)
+
 except Exception as e:
     st.error(f"An error occurred: {e}")
-
-# Rest of your code...
-
 
 ingredients_list = st.multiselect(
 'Choose up to 5 ingredients: '
