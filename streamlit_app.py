@@ -26,15 +26,15 @@ session = cnx.session()
 
 session.execute(f"USE WAREHOUSE {warehouse_name}")
 
-#my_dataframe = session.table("smoothies.public.fruit_options").select(col('FRUIT_NAME'))
-#st.dataframe(data=my_dataframe, use_container_width=True)
-#st.stop()
+my_dataframe = session.table("smoothies.public.fruit_options").select(col('FRUIT_NAME'),col('SEARCH_ON'))
+st.dataframe(data=my_dataframe, use_container_width=True)
+st.stop()
 
-try:
-    my_dataframe = session.table("smoothies.public.fruit_options").select(col('FRUIT_NAME'),col('SEARCH_ON'))
-    st.dataframe(data=my_dataframe, use_container_width=True)
-except Exception as e:
-    st.error(f"An error occurred: {e}")
+#try:
+#    my_dataframe = session.table("smoothies.public.fruit_options").select(col('FRUIT_NAME'),col('SEARCH_ON'))
+#    st.dataframe(data=my_dataframe, use_container_width=True)
+#except Exception as e:
+#    st.error(f"An error occurred: {e}")
 
 ingredients_list = st.multiselect(
 'Choose up to 5 ingredients: '
