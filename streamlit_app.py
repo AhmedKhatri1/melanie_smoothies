@@ -15,9 +15,9 @@ st.write("The name on your Smoothie will be:", name_on_order)
 
 # Set Snowflake connection options
 conn_options = {
-    "account": "your_account_name",
-    "user": "your_username",
-    "password": "your_password",
+    "account": "WOQATQC-QR71295",
+    "user": "AhmedKha3",
+    "password": "Aksnowflake@12345",
     "warehouse": "COMPUTE_H"
 }
 
