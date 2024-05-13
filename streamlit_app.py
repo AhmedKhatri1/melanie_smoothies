@@ -7,7 +7,7 @@ cnx = st.connection("snowflake")
 session = cnx.session()
 
 # Set Snowflake warehouse name
-warehouse_name = "<your_warehouse_name>"
+warehouse_name = "COMPUTE_H"
 session.execute(f"USE WAREHOUSE {warehouse_name}")
 
 # Write directly to the app
